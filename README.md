@@ -1,4 +1,4 @@
-# Play Framework 2 Sample
+# Play Framework 2 Study
 
 This project is my study project which uses Play Framework 2 and the following libraries.
 
