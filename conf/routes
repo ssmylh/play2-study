@@ -1,0 +1,13 @@
+GET   /                     controllers.Root.index
+
+GET   /students             controllers.Students.searchByKana(kana: Option[String], offset: Int ?= 0, limit: Int ?= 30)
+GET   /students.json        controllers.Students.searchByKana(kana: Option[String], offset: Int ?= 0, limit: Int ?= 30)
+GET   /students             controllers.Students.searchByKana(kana: Option[String], offset: Int ?= 0, limit: Int ?= 30)
+GET   /students/:id.json    controllers.Students.show(id: Long)
+GET   /students/:id         controllers.Students.show(id: Long)
+
+GET   /:grade.json          controllers.Grades.show(grade: Int)
+GET   /:grade               controllers.Grades.show(grade: Int)
+
+GET   /:grade/:clazz.json   controllers.Classes.show(grade: Int, clazz: String)
+GET   /:grade/:clazz        controllers.Classes.show(grade: Int, clazz: String)
