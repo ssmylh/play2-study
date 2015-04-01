@@ -7,7 +7,6 @@ import org.scalatest.Matchers._
 import controllers.Students
 
 class StudentSpec extends FlatSpec with AutoRollback with settings.DBSettings {
-  override def db = NamedDB(dbName).toDB
 
   override def fixture(implicit session: DBSession): Unit = {
     val clazzId = sql"""insert into class (grade, name) values (1, '1組');""".updateAndReturnGeneratedKey.apply()

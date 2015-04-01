@@ -3,13 +3,13 @@ package settings
 import scalikejdbc._
 
 object DBInitializer {
-  def run(dbName: Symbol): Unit = {
-    NamedDB(dbName) readOnly { implicit session =>
+  def run(): Unit = {
+    DB readOnly { implicit session =>
       try {
         sql"select 1 from class limit 1".map(_.long(1)).single.apply()
       } catch {
         case e: java.sql.SQLException =>
-          NamedDB(dbName) autoCommit { implicit session =>
+          DB autoCommit { implicit session =>
             sql"""
 create sequence class_id_seq start with 1;
 create table class (
