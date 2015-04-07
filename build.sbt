@@ -1,7 +1,7 @@
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala)
   .settings(
-    name := "play2-sample",
+    name := "play2-study",
     version := "0.1",
     scalaVersion := "2.11.6",
     libraryDependencies ++= Seq(
