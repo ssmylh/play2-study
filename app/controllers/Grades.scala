@@ -13,7 +13,7 @@ object Grades extends Controller {
   }
   implicit val gradeWrites: Writes[Grade] = new Writes[Grade] {
     def writes(grade: Grade) = Json.obj(
-      "name" -> "%d年".format(grade.grade),
+      "grade" -> grade.grade,
       "classes" -> grade.classes)
   }
 

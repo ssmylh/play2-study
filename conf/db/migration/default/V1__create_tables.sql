@@ -22,9 +22,9 @@ create table class2student (
 );
 alter table class2student add primary key (class_id, student_id);
 
-insert into class (grade, name) values (1, '1組');
-insert into class (grade, name) values (2, '1組');
-insert into class (grade, name) values (3, '1組');
+insert into class (grade, name) values (1, '1');
+insert into class (grade, name) values (2, '1');
+insert into class (grade, name) values (3, '1');
 
 insert into student (last_name, first_name, kana) values ('梅沢', 'めぐみ', 'うめざわめぐみ');
 insert into student (last_name, first_name, kana) values ('平賀', 'メイサ', 'ひらがめいさ');

@@ -11,14 +11,14 @@ object Classes extends Controller {
       "lastName" -> student.lastName,
       "firstName" -> student.firstName,
       "kana" -> student.kana,
-      "grade" -> student.grade.fold("-")("%d年".format(_)),
+      "grade" -> student.grade.fold("-")(_.toString),
       "class" -> student.clazz.fold("-")(identity)
       )
   }
   implicit val classWrites: Writes[Class] = new Writes[Class] {
     def writes(clazz: Class) = Json.obj(
-      "grade" -> "%d年".format(clazz.grade),
-      "name" -> clazz.name,
+      "grade" -> clazz.grade,
+      "class" -> clazz.name,
       "students" -> clazz.students)
   }
 

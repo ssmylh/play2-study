@@ -11,7 +11,7 @@ object Students extends Controller {
       "lastName" -> student.lastName,
       "firstName" -> student.firstName,
       "kana" -> student.kana,
-      "grade" -> student.grade.fold("-")("%d年".format(_)),
+      "grade" -> student.grade.fold("-")(_.toString),
       "class" -> student.clazz.fold("-")(identity))
   }
 
