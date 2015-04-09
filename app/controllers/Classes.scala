@@ -2,6 +2,8 @@ package controllers
 
 import play.api.mvc._
 import play.api.libs.json._
+import play.api.libs.functional.syntax._
+import play.utils._
 import models._
 
 object Classes extends Controller {
@@ -26,4 +28,12 @@ object Classes extends Controller {
     Class.findByGradeAndName(grade, name).map(clazz => Ok(Json.toJson(clazz))) getOrElse NotFound
   }
 
+  def put(grade: Int) = Action(BodyParsers.parse.json) { request =>
+    (request.body \ "class").asOpt[String] match {
+      case Some(name) =>
+        val clazz = Class.put(grade, name)
+        Created(Json.toJson(clazz)).withHeaders(LOCATION -> UriEncoding.encodePathSegment(s"/${grade}/${name}", "UTF-8"))
+      case None => BadRequest
+    }
+  }
 }

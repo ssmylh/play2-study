@@ -8,7 +8,7 @@ import org.scalatest.Matchers._
 class ClassSpec extends FlatSpec with AutoRollback with settings.DBSettings {
 
   override def fixture(implicit session: DBSession): Unit = {
-    val clazzId = sql"""insert into class (grade, name) values (1, '1組');""".updateAndReturnGeneratedKey.apply()
+    val clazzId = sql"""insert into class (grade, name) values (1, '1');""".updateAndReturnGeneratedKey.apply()
     val student1Id = sql"""insert into student (last_name, first_name, kana) values ('山田', '一郎', 'やまだいちろう');""".updateAndReturnGeneratedKey.apply()
     val student2Id = sql"""insert into student (last_name, first_name, kana) values ('山田', '二郎', 'やまだじろう');""".updateAndReturnGeneratedKey.apply()
     val student3Id = sql"""insert into student (last_name, first_name, kana) values ('山田', '三郎', 'やまださぶろう');""".updateAndReturnGeneratedKey.apply()
@@ -25,7 +25,18 @@ class ClassSpec extends FlatSpec with AutoRollback with settings.DBSettings {
   }
 
   it should "find by grade and name" in { implicit session =>
-    val classOpt = Class.findByGradeAndName(1, "1組")
+    val classOpt = Class.findByGradeAndName(1, "1")
     classOpt.get.students.length should be(3)
+  }
+
+  it should "create" in { implicit session =>
+    val clazz = Class.create(1, "2")
+    clazz.id should be > 3L
+  }
+
+  it should "put" in { implicit session =>
+    // TODO considering whether the record exists or does not exists
+    val clazz = Class.put(1, "2")
+    clazz.id should be > 3L
   }
 }

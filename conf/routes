@@ -11,3 +11,4 @@ GET   /:grade               controllers.Grades.show(grade: Int)
 
 GET   /:grade/:clazz.json   controllers.Classes.show(grade: Int, clazz: String)
 GET   /:grade/:clazz        controllers.Classes.show(grade: Int, clazz: String)
+PUT   /:grade               controllers.Classes.put(grade: Int)
