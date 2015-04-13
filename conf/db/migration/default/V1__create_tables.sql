@@ -5,6 +5,7 @@ create table class (
   grade int not null,
   name varchar(255) not null
 );
+alter table class add unique key (grade, name);
 
 drop table if exists student;
 create sequence student_id_seq start with 1;
