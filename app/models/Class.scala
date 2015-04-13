@@ -32,14 +32,6 @@ object Class extends SQLSyntaxSupport[Class] {
     .map { (clazz, students) => clazz.copy(students = students.map(Student(_, clazz))) }
     .single.apply()
 
-  def put(grade: Int, name: String)(implicit session: DBSession = autoSession): Class = {
-    // TODO grade validation
-    findByGradeAndName(grade, name) match {
-      case Some(clazz) => clazz
-      case None => create(grade, name)
-    }
-  }
-
   def create(grade: Int, name: String)(implicit session: DBSession = autoSession): Class = {
     val id = withSQL {
       insert.into(Class).namedValues(

@@ -28,10 +28,10 @@ object Classes extends Controller {
     Class.findByGradeAndName(grade, name).map(clazz => Ok(Json.toJson(clazz))) getOrElse NotFound
   }
 
-  def put(grade: Int) = Action(BodyParsers.parse.json) { request =>
+  def create(grade: Int) = Action(BodyParsers.parse.json) { request =>
     (request.body \ "class").asOpt[String] match {
       case Some(name) =>
-        val clazz = Class.put(grade, name)
+        val clazz = Class.create(grade, name)
         Created(Json.toJson(clazz)).withHeaders(LOCATION -> UriEncoding.encodePathSegment(s"/${grade}/${name}", "UTF-8"))
       case None => BadRequest
     }

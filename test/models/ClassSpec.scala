@@ -31,12 +31,6 @@ class ClassSpec extends FlatSpec with AutoRollback with settings.DBSettings {
 
   it should "create" in { implicit session =>
     val clazz = Class.create(1, "2")
-    clazz.id should be > 3L
-  }
-
-  it should "put" in { implicit session =>
-    // TODO considering whether the record exists or does not exists
-    val clazz = Class.put(1, "2")
-    clazz.id should be > 3L
+    clazz.name should be ("2")
   }
 }
