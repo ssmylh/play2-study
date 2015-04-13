@@ -53,4 +53,26 @@ object Student extends SQLSyntaxSupport[Student] {
 
   def searchByKana(kana: Option[String], offset: Int, limit: Int)(implicit sesstion: DBSession = autoSession): List[Student] =
     searchByName(kanaLike, kana, offset, limit)
+
+  def create(lastName: String, firstName: String, kana: String,
+    grade: Int, clazz: String)(implicit session: DBSession = autoSession): Either[Exception, Student] = {
+    try {
+      Class.findByGradeAndName(grade, clazz) match {
+        case None => Left(new RuntimeException("Class is not found."))
+        case Some(k) => {
+          val id = withSQL {
+            insert.into(Student).namedValues(
+              column.lastName -> lastName,
+              column.firstName -> firstName,
+              column.kana -> kana)
+          }.updateAndReturnGeneratedKey.apply()
+          sql"""insert into class2student (class_id, student_id) values (${k.id}, ${id});""".execute.apply()
+
+          Right(Student(id = id, lastName = lastName, firstName = firstName, kana = kana, grade = Some(grade), clazz = Some(clazz)))
+        }
+      }
+    } catch {
+      case e: Exception => Left(e)// TODO should distinguish between RuntimeException and SQLException
+    }
+  }
 }

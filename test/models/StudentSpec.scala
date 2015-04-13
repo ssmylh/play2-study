@@ -9,7 +9,7 @@ import controllers.Students
 class StudentSpec extends FlatSpec with AutoRollback with settings.DBSettings {
 
   override def fixture(implicit session: DBSession): Unit = {
-    val clazzId = sql"""insert into class (grade, name) values (1, '1組');""".updateAndReturnGeneratedKey.apply()
+    val clazzId = sql"""insert into class (grade, name) values (1, '1');""".updateAndReturnGeneratedKey.apply()
     val student1Id = sql"""insert into student (last_name, first_name, kana) values ('山田', '一郎', 'やまだいちろう');""".updateAndReturnGeneratedKey.apply()
     val student2Id = sql"""insert into student (last_name, first_name, kana) values ('山田', '二郎', 'やまだじろう');""".updateAndReturnGeneratedKey.apply()
     val student3Id = sql"""insert into student (last_name, first_name, kana) values ('鈴木', '一郎', 'すずきいちろう');""".updateAndReturnGeneratedKey.apply()
@@ -42,5 +42,15 @@ class StudentSpec extends FlatSpec with AutoRollback with settings.DBSettings {
   it should "find by unspecified kana, offset 5, limit 10" in { implicit session =>
     val students = Student.searchByKana(None, 5, 10)
     students.length should be (2)
+  }
+
+  it should "create if the class exist" in { implicit session =>
+    val either = Student.create("野口", "英雄", "のぐちひでお", 1, "1")
+    either.isRight should be (true)
+  }
+
+  it should "create if the class does not exist" in { implicit session =>
+    val either = Student.create("野口", "英雄", "のぐちひでお", 1, "2")
+    either.isLeft should be (true)
   }
 }
