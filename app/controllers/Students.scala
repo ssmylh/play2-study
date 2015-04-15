@@ -40,13 +40,10 @@ object Students extends Controller {
     request.body.validate[PostParams].fold(
       errors => BadRequest(JsError.toFlatJson(errors)),
       params => {
-        val either = DB localTx { implicit session =>
+        val student = DB localTx { implicit session =>
           Student.create(params.lastName, params.firstName, params.kana, params.grade, params.clazz)
         }
-        either match {
-          case Right(student) => Created(Json.toJson(student)).withHeaders(LOCATION -> UriEncoding.encodePathSegment(s"/students/${student.id}", "UTF-8"))
-          case Left(e) => BadRequest // TODO should return proper status
-        }
+        Created(Json.toJson(student)).withHeaders(LOCATION -> UriEncoding.encodePathSegment(s"/students/${student.id}", "UTF-8"))
       })
   }
 }
