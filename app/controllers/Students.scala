@@ -5,6 +5,7 @@ import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.utils._
 import models._
+import scalikejdbc._
 
 object Students extends Controller {
   implicit val studentWrites: Writes[Student] = new Writes[Student] {
@@ -39,7 +40,9 @@ object Students extends Controller {
     request.body.validate[PostParams].fold(
       errors => BadRequest(JsError.toFlatJson(errors)),
       params => {
-        val either = Student.create(params.lastName, params.firstName, params.kana, params.grade, params.clazz)
+        val either = DB localTx { implicit session =>
+          Student.create(params.lastName, params.firstName, params.kana, params.grade, params.clazz)
+        }
         either match {
           case Right(student) => Created(Json.toJson(student)).withHeaders(LOCATION -> UriEncoding.encodePathSegment(s"/students/${student.id}", "UTF-8"))
           case Left(e) => BadRequest // TODO should return proper status
