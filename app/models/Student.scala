@@ -9,6 +9,7 @@ object Student extends SQLSyntaxSupport[Student] {
   val s = Student.syntax("s")
   val c2s = Class2Student.c2s
   val c = Class.c
+  private val c2sColumun = Class2Student.column
 
   def apply(s: ResultName[Student])(rs: WrappedResultSet): Student = new Student(
     id = rs.get(s.id),
@@ -66,7 +67,12 @@ object Student extends SQLSyntaxSupport[Student] {
               column.firstName -> firstName,
               column.kana -> kana)
           }.updateAndReturnGeneratedKey.apply()
-          sql"""insert into class2student (class_id, student_id) values (${k.id}, ${id});""".execute.apply()
+
+          withSQL {
+            insert.into(Class2Student).namedValues(
+              c2sColumun.classId -> k.id,
+              c2sColumun.studentId -> id)
+          }.update.apply()
 
           Right(Student(id = id, lastName = lastName, firstName = firstName, kana = kana, grade = Some(grade), clazz = Some(clazz)))
         }
