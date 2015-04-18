@@ -89,4 +89,10 @@ object Student extends SQLSyntaxSupport[Student] {
     }.update().apply()
     student
   }
+
+  def delete(id: Long)(implicit session: DBSession = autoSession): Unit = {
+    withSQL {
+      QueryDSL.delete.from(Student).where.eq(column.id, id)
+    }.update().apply()
+  }
 }

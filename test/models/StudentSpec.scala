@@ -62,4 +62,10 @@ class StudentSpec extends FlatSpec with AutoRollback with settings.DBSettings {
     val updated = student.copy(kana = "ささきのぞむ").update()
     updated.kana should be ("ささきのぞむ")
   }
+
+  it should "delete by id" in {implicit session =>
+    val student = Student.create("小島", "一正", "こじまかずまさ", 1, "1")
+    Student.delete(student.id)
+    Student.find(student.id).isEmpty should be (true)
+  }
 }

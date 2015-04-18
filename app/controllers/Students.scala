@@ -59,4 +59,9 @@ object Students extends Controller {
         } getOrElse BadRequest("Student is not found.")
       })
   }
+
+  def delete(id: Long) = Action {
+    Student.delete(id)
+    Ok
+  }
 }
