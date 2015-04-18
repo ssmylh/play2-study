@@ -51,7 +51,7 @@ class StudentSpec extends FlatSpec with AutoRollback with settings.DBSettings {
     shouldNotNone.get.clazz.isDefined should be (true)
   }
 
-  it should "create if the class is undefined" in { implicit session =>
+  it should "create throw IllegalArgumentException if the class is undefined " in { implicit session =>
     val undefinedClass = "2"
     an [IllegalArgumentException] should be thrownBy Student.create("野口", "英雄", "のぐちひでお", 1, undefinedClass)
   }
