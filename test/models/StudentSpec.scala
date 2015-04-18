@@ -55,4 +55,10 @@ class StudentSpec extends FlatSpec with AutoRollback with settings.DBSettings {
     val undefinedClass = "2"
     an [IllegalArgumentException] should be thrownBy Student.create("野口", "英雄", "のぐちひでお", 1, undefinedClass)
   }
+
+  it should "update" in { implicit session =>
+    val student = Student.create("佐々木", "望", "ささきのぞみ", 1, "1")
+    val updated = student.copy(kana = "ささきのぞむ").update()
+    updated.kana should be ("ささきのぞむ")
+  }
 }

@@ -46,4 +46,16 @@ object Students extends Controller {
         Created(Json.toJson(student)).withHeaders(LOCATION -> UriEncoding.encodePathSegment(s"/students/${student.id}", "UTF-8"))
       })
   }
+
+  def update(id: Long) = Action(BodyParsers.parse.json) { request =>
+    request.body.validate[PostParams].fold(
+      errors => BadRequest(JsError.toFlatJson(errors)),
+      params => {
+        val student = Student(id = id, lastName = params.lastName, firstName = params.firstName, kana = params.kana,
+            grade = Some(params.grade), clazz = Some(params.clazz))
+        val updated = Student.update(student)
+        Ok(Json.toJson(updated))
+      }
+    )
+  }
 }

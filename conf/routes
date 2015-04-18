@@ -6,6 +6,7 @@ GET   /students             controllers.Students.searchByKana(kana: Option[Strin
 GET   /students/:id.json    controllers.Students.show(id: Long)
 GET   /students/:id         controllers.Students.show(id: Long)
 POST  /students             controllers.Students.create
+POST  /students/:id         controllers.Students.update(id: Long)
 
 GET   /:grade.json          controllers.Grades.show(grade: Int)
 GET   /:grade               controllers.Grades.show(grade: Int)

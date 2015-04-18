@@ -4,6 +4,7 @@ import scalikejdbc._
 
 case class Student(id: Long, lastName: String, firstName: String, kana: String,
   grade: Option[Int] = None, clazz: Option[String] = None) {
+  def update()(implicit session: DBSession = Student.autoSession): Student = Student.update(this)(session)
 }
 object Student extends SQLSyntaxSupport[Student] {
   val s = Student.syntax("s")
@@ -76,5 +77,16 @@ object Student extends SQLSyntaxSupport[Student] {
         Student(id = id, lastName = lastName, firstName = firstName, kana = kana, grade = Some(grade), clazz = Some(clazz))
       }
     }
+  }
+
+  def update(student: Student)(implicit session: DBSession = autoSession): Student = {
+    withSQL {
+      QueryDSL.update(Student).set(
+        column.lastName -> student.lastName,
+        column.firstName -> student.firstName,
+        column.kana -> student.kana
+      ).where.eq(column.id, student.id)
+    }.update().apply()
+    student
   }
 }
