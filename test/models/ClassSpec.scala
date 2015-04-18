@@ -25,8 +25,8 @@ class ClassSpec extends FlatSpec with AutoRollback with settings.DBSettings {
   }
 
   it should "find by grade and name" in { implicit session =>
-    val classOpt = Class.findByGradeAndName(1, "1")
-    classOpt.get.students.length should be(3)
+    val some = Class.findByGradeAndName(1, "1")
+    some.get.students.length should be(3)
   }
 
   it should "create" in { implicit session =>

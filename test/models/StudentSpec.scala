@@ -29,9 +29,9 @@ class StudentSpec extends FlatSpec with AutoRollback with settings.DBSettings {
   behavior of "Student"
 
   it should "find by id" in { implicit session =>
-    val idOpt = sql"""select id from student limit 1""".map(_.long(1)).single.apply()
-    val studentOpt = Student.find(idOpt.get)
-    studentOpt.isDefined should be (true)
+    val id = sql"""select id from student limit 1""".map(_.long(1)).single.apply().get
+    val some = Student.find(id)
+    some.isDefined should be (true)
   }
 
   it should "find by specific kana, offset 0, limit 10" in { implicit session =>
@@ -47,9 +47,9 @@ class StudentSpec extends FlatSpec with AutoRollback with settings.DBSettings {
 
   it should "create if the class is defined" in { implicit session =>
     val student = Student.create("野口", "英雄", "のぐちひでお", 1, "1")
-    val shouldNotNone = Student.find(student.id)
-    shouldNotNone.get.grade.isDefined should be (true)
-    shouldNotNone.get.clazz.isDefined should be (true)
+    val some = Student.find(student.id)
+    some.get.grade.isDefined should be (true)
+    some.get.clazz.isDefined should be (true)
   }
 
   it should "create throw IllegalArgumentException if the class is undefined " in { implicit session =>
