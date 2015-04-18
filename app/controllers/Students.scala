@@ -51,11 +51,12 @@ object Students extends Controller {
     request.body.validate[PostParams].fold(
       errors => BadRequest(JsError.toFlatJson(errors)),
       params => {
-        val student = Student(id = id, lastName = params.lastName, firstName = params.firstName, kana = params.kana,
-            grade = Some(params.grade), clazz = Some(params.clazz))
-        val updated = Student.update(student)
-        Ok(Json.toJson(updated))
-      }
-    )
+        Student.find(id).map { student =>
+          val updated = student.copy(
+            lastName = params.lastName, firstName = params.firstName, kana = params.kana,
+            grade = Option(params.grade), clazz = Option(params.clazz)).update()
+          Ok(Json.toJson(updated))
+        } getOrElse BadRequest("Student is not found.")
+      })
   }
 }
