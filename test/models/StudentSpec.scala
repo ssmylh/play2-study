@@ -50,6 +50,10 @@ class StudentSpec extends FlatSpec with AutoRollback with settings.DBSettings {
     val some = Student.find(student.id)
     some.get.grade.isDefined should be (true)
     some.get.clazz.isDefined should be (true)
+
+    val c2sSome = sql"""select class_id from class2student where student_id = ${student.id}"""
+      .map(rs => rs.long("class_id")).single().apply()
+    c2sSome.isDefined should be (true)
   }
 
   it should "create throw IllegalArgumentException if the class is undefined " in { implicit session =>
