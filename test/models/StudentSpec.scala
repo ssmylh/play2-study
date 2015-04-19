@@ -67,5 +67,9 @@ class StudentSpec extends FlatSpec with AutoRollback with settings.DBSettings {
     val student = Student.create("小島", "一正", "こじまかずまさ", 1, "1")
     Student.delete(student.id)
     Student.find(student.id).isEmpty should be (true)
+
+    val c2sNone = sql"""select class_id from class2student where student_id = ${student.id}"""
+      .map(rs => rs.long("class_id")).single().apply()
+    c2sNone.isEmpty should be (true)
   }
 }

@@ -94,5 +94,6 @@ object Student extends SQLSyntaxSupport[Student] {
     withSQL {
       QueryDSL.delete.from(Student).where.eq(column.id, id)
     }.update().apply()
+    Class2Student.deleteByStudentId(id)
   }
 }
