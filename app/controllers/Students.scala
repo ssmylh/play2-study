@@ -61,7 +61,9 @@ object Students extends Controller {
   }
 
   def delete(id: Long) = Action {
-    Student.delete(id)
-    Ok
+    DB localTx { implicit session =>
+      Student.delete(id)
+      Ok
+    }
   }
 }
