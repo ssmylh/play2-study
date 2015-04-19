@@ -40,4 +40,17 @@ object Class extends SQLSyntaxSupport[Class] {
     }.updateAndReturnGeneratedKey.apply()
     Class(id = id, grade = grade, name = name)
   }
+
+  def delete(grade: Int, name: String)(implicit session: DBSession = autoSession): Unit = {
+    findByGradeAndName(grade, name) match {
+      case None => return
+      case Some(k) => {
+        Class2Student.deleteByClassId(k.id)
+        Student.deleteMany(k.students.map(_.id))
+        withSQL {
+          QueryDSL.delete.from(Class).where.eq(column.grade, grade).and.eq(column.name, name)
+        }.update().apply()
+      }
+    }
+  }
 }

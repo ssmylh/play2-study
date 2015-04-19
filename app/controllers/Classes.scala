@@ -5,6 +5,7 @@ import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.utils._
 import models._
+import scalikejdbc._
 
 object Classes extends Controller {
   implicit val studentWrites: Writes[Student] = new Writes[Student] {
@@ -34,6 +35,13 @@ object Classes extends Controller {
         val clazz = Class.create(grade, name)
         Created(Json.toJson(clazz)).withHeaders(LOCATION -> UriEncoding.encodePathSegment(s"/${grade}/${name}", "UTF-8"))
       case None => BadRequest
+    }
+  }
+
+  def delete(grade: Int, name: String) = Action {
+    DB localTx { implicit session =>
+      Class.delete(grade, name)
+      Ok
     }
   }
 }

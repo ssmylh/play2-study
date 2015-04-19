@@ -96,4 +96,11 @@ object Student extends SQLSyntaxSupport[Student] {
     }.update().apply()
     Class2Student.deleteByStudentId(id)
   }
+
+  def deleteMany(ids: Seq[Long])(implicit session: DBSession = autoSession): Unit = {
+    withSQL {
+      QueryDSL.delete.from(Student).where.in(column.id, ids)
+    }.update().apply()
+    ids.foreach(id => Class2Student.deleteByStudentId(id))
+  }
 }
