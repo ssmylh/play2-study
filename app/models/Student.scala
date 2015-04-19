@@ -101,6 +101,6 @@ object Student extends SQLSyntaxSupport[Student] {
     withSQL {
       QueryDSL.delete.from(Student).where.in(column.id, ids)
     }.update().apply()
-    ids.foreach(id => Class2Student.deleteByStudentId(id))
+    Class2Student.deleteManyByStudentByIds(ids)
   }
 }

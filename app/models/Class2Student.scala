@@ -13,6 +13,12 @@ object Class2Student extends SQLSyntaxSupport[Class2Student] {
     }.update().apply()
   }
 
+  def deleteManyByStudentByIds(studentIds: Seq[Long])(implicit session: DBSession = autoSession): Unit = {
+    withSQL {
+      delete.from(Class2Student).where.in(column.studentId, studentIds)
+    }.update().apply()
+  }
+
   def deleteByClassId(classId: Long)(implicit session: DBSession = autoSession): Unit = {
     withSQL {
       delete.from(Class2Student).where.eq(column.classId, classId)
